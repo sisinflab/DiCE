@@ -25,7 +25,7 @@ class KerasTensorFlowModel(BaseModel):
         if self.model_path != '':
             self.model = keras.models.load_model(self.model_path)
 
-    def get_output(self, input_tensor, training=False, transform_data=False):
+    def get_output(self, input_tensor, training=False, transform_data=False, model_score=None):
         """returns prediction probabilities
 
         :param input_tensor: test input.
