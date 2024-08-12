@@ -802,17 +802,17 @@ class ExplainerBase(ABC):
         else:
             output_type = np.float32
         model_output = np.zeros(len(model_scores), dtype=output_type)
-        for i in range(len(model_scores)):
-            if self.model.model_type == ModelTypes.Classifier:
-                if hasattr(model_scores[i], "shape") and len(model_scores[i].shape) > 0:
-                    if model_scores[i].shape[0] > 1:
-                        model_output[i] = np.argmax(model_scores[i])
-                    else:
-                        model_output[i] = np.round(model_scores[i])[0]
-                else:  # 1-D input
-                    model_output[i] = np.round(model_scores[i])
-            elif self.model.model_type == ModelTypes.Regressor:
-                model_output[i] = model_scores[i]
+        # for i in range(len(model_scores)):
+        if self.model.model_type == ModelTypes.Classifier:
+            if hasattr(model_scores, "shape") and len(model_scores.shape) > 0:
+                if model_scores.shape[1] > 1:
+                    model_output = np.argmax(model_scores, axis=1)
+                else:
+                    model_output = np.round(model_scores)
+            else:  # 1-D input
+                model_output = np.round(model_scores)
+        elif self.model.model_type == ModelTypes.Regressor:
+            model_output = model_scores
         return model_output
 
     def check_permitted_range(self, permitted_range):
